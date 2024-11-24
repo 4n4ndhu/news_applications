@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:news_applications/controller/news_screen_controller.dart';
-import 'package:news_applications/main.dart';
+import 'package:news_applications/view/bottom_navbar_screen/bottom_navbar_screen.dart';
+
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -21,6 +22,13 @@ class CategoryScreen extends StatelessWidget {
           builder: (context, value, child) => SingleChildScrollView(
             child: Column(
               children: [
+                Text(
+                  "Click on a Category ",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                ),
                 GridView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -31,8 +39,13 @@ class CategoryScreen extends StatelessWidget {
                               log(value.category[index]);
                               value.categoryIndex = value.category[index];
                               value.getData();
-
-                              Navigator.pop(context);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BottomNavbarScreen(),
+                                ),
+                                (route) => false,
+                              );
                             },
                             child: Container(
                               color: Colors.red,

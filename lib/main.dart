@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:news_applications/controller/detail_screen_controller.dart';
 import 'package:news_applications/controller/news_screen_controller.dart';
-import 'package:news_applications/view/news_screen/news_screen.dart';
+
+import 'package:news_applications/view/category_screen/category_screen.dart';
+
 import 'package:provider/provider.dart';
 
 void main() {
@@ -16,9 +19,12 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => NewsScreenController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => DetailScreenController(),
         )
       ],
-      child: MaterialApp(home: NewsScreen()),
+      child: MaterialApp(home: CategoryScreen()),
     );
   }
 }
