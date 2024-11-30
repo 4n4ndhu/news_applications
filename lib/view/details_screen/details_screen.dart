@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailsScreen extends StatelessWidget {
@@ -32,7 +33,20 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          actions: [Icon(Icons.share)],
+          actions: [
+            SizedBox(
+              width: 15,
+            ),
+            IconButton(
+              onPressed: () {
+                Share.share(url);
+              },
+              icon: Icon(
+                Icons.share,
+                color: Colors.black,
+              ),
+            )
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),

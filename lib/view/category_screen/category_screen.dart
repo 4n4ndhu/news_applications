@@ -19,21 +19,21 @@ class CategoryScreen extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           actions: [
-            TextButton(
-                onPressed: () {
-                  context.read<NewsScreenController>().getData();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NewsScreen(),
-                    ),
-                    (route) => false,
-                  );
-                },
-                child: Text(
-                  "skip",
-                  style: TextStyle(color: Colors.blue),
-                ))
+            // TextButton(
+            //     onPressed: () {
+            //       context.read<NewsScreenController>().getData();
+            //       Navigator.pushAndRemoveUntil(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => NewsScreen(),
+            //         ),
+            //         (route) => false,
+            //       );
+            //     },
+            //     child: Text(
+            //       "skip",
+            //       style: TextStyle(color: Colors.blue),
+            //     ))
           ],
         ),
         body: Consumer<NewsScreenController>(

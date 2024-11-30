@@ -37,9 +37,9 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         actions: [
           IconButton(
             onPressed: () {
@@ -50,7 +50,10 @@ class _NewsScreenState extends State<NewsScreen> {
                 ),
               );
             },
-            icon: Icon(Icons.arrow_right),
+            icon: Icon(
+              Icons.menu,
+              color: Colors.black,
+            ),
           ),
         ],
       ),

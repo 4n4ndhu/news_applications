@@ -48,7 +48,7 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
               activeIcon: Icon(
                 Icons.bookmark,
               ),
-              label: "Subscriptions"),
+              label: "saved"),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person_outline,
