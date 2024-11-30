@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_applications/view/news_screen/news_screen.dart';
+import 'package:news_applications/view/profile_screen/profile_screen.dart';
+import 'package:news_applications/view/saved_screen/saved_screen.dart';
 
 class BottomNavbarScreen extends StatefulWidget {
   const BottomNavbarScreen({super.key});
@@ -9,15 +11,7 @@ class BottomNavbarScreen extends StatefulWidget {
 }
 
 class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
-  List screens = [
-    NewsScreen(),
-    Container(
-      color: Colors.yellow,
-    ),
-    Container(
-      color: Colors.blue,
-    ),
-  ];
+  List screens = [NewsScreen(), SavedScreen(), ProfileScreen()];
   int selected = 0;
   @override
   Widget build(BuildContext context) {

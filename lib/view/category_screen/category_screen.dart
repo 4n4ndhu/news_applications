@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:news_applications/controller/news_screen_controller.dart';
 import 'package:news_applications/view/bottom_navbar_screen/bottom_navbar_screen.dart';
+import 'package:news_applications/view/news_screen/news_screen.dart';
 
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,23 @@ class CategoryScreen extends StatelessWidget {
             "Category",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  context.read<NewsScreenController>().getData();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NewsScreen(),
+                    ),
+                    (route) => false,
+                  );
+                },
+                child: Text(
+                  "skip",
+                  style: TextStyle(color: Colors.blue),
+                ))
+          ],
         ),
         body: Consumer<NewsScreenController>(
           builder: (context, value, child) => SingleChildScrollView(
@@ -48,15 +66,22 @@ class CategoryScreen extends StatelessWidget {
                               );
                             },
                             child: Container(
-                              color: Colors.red,
-                              child: Center(
-                                child: Text(value.category[index]),
-                              ),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  image: DecorationImage(
+                                      image: NetworkImage(context
+                                          .watch<NewsScreenController>()
+                                          .categoryImage[index]),
+                                      fit: BoxFit.fitHeight)),
+                              // child: Center(
+                              //   child: Text(value.category[index]),
+                              // ),
                             ),
                           ),
                         ),
                     itemCount: value.category.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 20,
                       crossAxisCount: 2,
                     )),
               ],

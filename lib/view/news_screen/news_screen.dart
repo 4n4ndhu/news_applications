@@ -5,46 +5,58 @@ import 'package:news_applications/view/details_screen/details_screen.dart';
 import 'package:provider/provider.dart';
 
 class NewsScreen extends StatefulWidget {
-  // String newsData = "";
-  NewsScreen({
-    super.key,
-  });
+  NewsScreen({super.key});
 
   @override
   State<NewsScreen> createState() => _NewsScreenState();
 }
 
 class _NewsScreenState extends State<NewsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
-  // void initState() {
-  //   WidgetsBinding.instance.addPostFrameCallback(
-  //     (timeStamp) {
-  //       context.read<NewsScreenController>().getData();
-  //     },
-  //   );
-  //   super.initState();
-  // }
+  void initState() {
+    super.initState();
+    // You can trigger data fetching in initState if needed, like so:
+    // context.read<NewsScreenController>().getData();
+    _searchController.addListener(_filterNews);
+  }
+
+  void _filterNews() {
+    final query = _searchController.text.toLowerCase();
+    context.read<NewsScreenController>().filterNews(query);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterNews);
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CategoryScreen(),
-                      ));
-                },
-                icon: Icon(Icons.arrow_right))
-          ],
-        ),
-        body: Consumer<NewsScreenController>(
-          builder: (context, provideObj, child) => SingleChildScrollView(
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CategoryScreen(),
+                ),
+              );
+            },
+            icon: Icon(Icons.arrow_right),
+          ),
+        ],
+      ),
+      body: Consumer<NewsScreenController>(
+        builder: (context, provider, child) {
+          return SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,10 +64,12 @@ class _NewsScreenState extends State<NewsScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: TextField(
+                    controller: _searchController,
                     decoration: InputDecoration(
                       hintText: "Search",
                       border: OutlineInputBorder(),
                     ),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
                 Padding(
@@ -68,7 +82,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         color: Colors.white),
                   ),
                 ),
-                provideObj.isLoading
+                provider.isLoading
                     ? Center(
                         child: CircularProgressIndicator(),
                       )
@@ -77,35 +91,38 @@ class _NewsScreenState extends State<NewsScreen> {
                         child: ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: provideObj.dataList.length,
+                          itemCount: provider.filteredDataList.length,
                           itemBuilder: (context, index) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: InkWell(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => DetailsScreen(
-                                        imageUrl: provideObj
-                                                .dataList[index].urlToImage ??
-                                            "",
-                                        title: provideObj.dataList[index].title
-                                            .toString(),
-                                        author: provideObj
-                                            .dataList[index].author
-                                            .toString(),
-                                        descrbtion: provideObj
-                                            .dataList[index].description
-                                            .toString(),
-                                        content: provideObj
-                                            .dataList[index].content
-                                            .toString(),
-                                        url: provideObj.dataList[index].url
-                                            .toString(),
-                                      ),
-                                    ));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailsScreen(
+                                      imageUrl: provider.filteredDataList[index]
+                                              .urlToImage ??
+                                          "",
+                                      title: provider
+                                          .filteredDataList[index].title
+                                          .toString(),
+                                      author: provider
+                                          .filteredDataList[index].author
+                                          .toString(),
+                                      description: provider
+                                          .filteredDataList[index].description
+                                          .toString(),
+                                      content: provider
+                                          .filteredDataList[index].content
+                                          .toString(),
+                                      url: provider.filteredDataList[index].url
+                                          .toString(),
+                                    ),
+                                  ),
+                                );
                               },
-                              child: provideObj.dataList[index].urlToImage ==
+                              child: provider
+                                          .filteredDataList[index].urlToImage ==
                                       null
                                   ? SizedBox()
                                   : Container(
@@ -113,13 +130,15 @@ class _NewsScreenState extends State<NewsScreen> {
                                       height: 250,
                                       width: double.infinity,
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          image: DecorationImage(
-                                              image: NetworkImage(provideObj
-                                                  .dataList[index].urlToImage
-                                                  .toString()),
-                                              fit: BoxFit.cover)),
+                                        borderRadius: BorderRadius.circular(10),
+                                        image: DecorationImage(
+                                          image: NetworkImage(provider
+                                              .filteredDataList[index]
+                                              .urlToImage
+                                              .toString()),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -127,11 +146,13 @@ class _NewsScreenState extends State<NewsScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            provideObj.dataList[index].author ==
+                                            provider.filteredDataList[index]
+                                                        .author ==
                                                     null
                                                 ? "no author"
-                                                : provideObj
-                                                    .dataList[index].author
+                                                : provider
+                                                    .filteredDataList[index]
+                                                    .author
                                                     .toString(),
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
@@ -141,7 +162,8 @@ class _NewsScreenState extends State<NewsScreen> {
                                             height: 5,
                                           ),
                                           Text(
-                                            provideObj.dataList[index].title
+                                            provider
+                                                .filteredDataList[index].title
                                                 .toString(),
                                             style: TextStyle(
                                                 color: Colors.white,
@@ -156,7 +178,9 @@ class _NewsScreenState extends State<NewsScreen> {
                       ),
               ],
             ),
-          ),
-        ));
+          );
+        },
+      ),
+    );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news_applications/controller/detail_screen_controller.dart';
+// import 'package:news_applications/controller/detail_screen_controller.dart';
 import 'package:news_applications/controller/news_screen_controller.dart';
 
 import 'package:news_applications/view/category_screen/category_screen.dart';
@@ -20,11 +20,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => NewsScreenController(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => DetailScreenController(),
-        )
+        // ChangeNotifierProvider(
+        //   create: (context) => DetailScreenController(),
+        // )
       ],
-      child: MaterialApp(home: CategoryScreen()),
+      child: MaterialApp(
+        home: CategoryScreen(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

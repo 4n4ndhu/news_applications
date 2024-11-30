@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:news_applications/controller/detail_screen_controller.dart';
-import 'package:news_applications/main.dart';
-import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailsScreen extends StatelessWidget {
   String imageUrl;
   String title;
   String? author;
-  String descrbtion;
+  String description;
   String content;
   String url;
 
@@ -17,13 +15,25 @@ class DetailsScreen extends StatelessWidget {
       required this.imageUrl,
       required this.title,
       required this.author,
-      required this.descrbtion,
+      required this.description,
       required this.content});
+
+  // Function to launch a URL using Uri
+  Future<void> launchURL(Uri url) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      // If the URL can't be launched, show an error in the console
+      print('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [Icon(Icons.share)],
+        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
@@ -63,15 +73,13 @@ class DetailsScreen extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 50,
-                      width: 150,
+                      width: 148,
                       child: ElevatedButton(
                           style: ButtonStyle(
                               backgroundColor:
-                                  WidgetStatePropertyAll(Colors.blue)),
+                                  MaterialStateProperty.all(Colors.blue)),
                           onPressed: () {
-                            context
-                                .read<DetailScreenController>()
-                                .launchURL(url);
+                            launchUrl(Uri.parse(url));
                           },
                           child: Center(
                             child: Text(
@@ -87,11 +95,8 @@ class DetailsScreen extends StatelessWidget {
                 SizedBox(
                   height: 15,
                 ),
-                SizedBox(
-                  height: 15,
-                ),
                 Text(
-                  descrbtion,
+                  description,
                   style: TextStyle(fontSize: 18),
                 ),
                 SizedBox(
